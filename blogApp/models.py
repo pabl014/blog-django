@@ -1,12 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
-# class CustomUser(AbstractUser):
-#     avatar = models.CharField(max_length=100, blank=True)
-#     isAdmin = models.BooleanField(default=False)
-
-#     def __str__(self):
-#         return self.username
 class CustomUser(AbstractUser):
     avatar = models.CharField(max_length=100, blank=True)
     isAdmin = models.BooleanField(default=False)
@@ -22,6 +16,7 @@ class Blog(models.Model):
 
 class Article(models.Model):
     title = models.CharField(max_length=100)
+    content = models.CharField(max_length=1000)
     public = models.BooleanField(default=False)
     password = models.CharField(max_length=100, blank=True)
     date = models.CharField(max_length=100)

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{{ article.title }}</title>
+</head>
+
+<body>
+    <h1>{{ article.title }}</h1>
+    <p>Date: {{ article.date }}</p>
+    <p>Location: {{ article.location }}</p>
+    <p>{{ article.content }}</p>
+    <h2>Comments</h2>
+    <ul>
+        {% for comment in comments %}
+        <li>{{ comment.body }} - submitted by {{ comment.author.username }}</li>
+        {% endfor %}
+    </ul>
+</body>
+
+</html>
