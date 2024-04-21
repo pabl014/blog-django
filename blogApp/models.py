@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
 # class CustomUser(AbstractUser):
 #     avatar = models.CharField(max_length=100, blank=True)
@@ -7,10 +7,15 @@ from django.contrib.auth.models import User
 
 #     def __str__(self):
 #         return self.username
+class CustomUser(AbstractUser):
+    avatar = models.CharField(max_length=100, blank=True)
+    isAdmin = models.BooleanField(default=False)
+    def __str__(self):
+        return self.username
 
 class Blog(models.Model):
     title = models.CharField(max_length=100)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title
@@ -27,7 +32,7 @@ class Article(models.Model):
         return self.title
 
 class Comment(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     body = models.TextField()
     article = models.ForeignKey(Article, on_delete=models.CASCADE)
 
