@@ -4,7 +4,13 @@
 
 {% block content %}
 <h1>Blog title: {{ blog.title }}</h1>
-<p>Author: {{ blog.author.username }}</p>
+<p class="mb-0">Submitted by:</p>
+<p class="mt-0">{% if author_avatar %}
+    <img src="{{ author_avatar.url }}" class="img-fluid" style=" width:60px; height:60px;" alt=" Avatar użytkownika">
+    {% endif %}
+    {{ blog.author.username }}
+
+</p>
 <h2>Articles:</h2>
 <ol>
     {% for article in articles %}

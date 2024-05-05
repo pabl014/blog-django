@@ -3,9 +3,11 @@ from .models import CustomUser, Blog, Article, Comment
 from django import forms
 
 class CustomUserCreationForm(UserCreationForm):
-    class Meta(UserCreationForm.Meta):
+    avatar = forms.ImageField(required=False)  # Dodajemy pole do formularza do przesyłania avatara
+
+    class Meta:
         model = CustomUser
-        fields = ('username', 'password1', 'password2', 'avatar', 'isAdmin')
+        fields = ['username', 'isAdmin', 'password1', 'password2', 'avatar']
 
 class BlogForm(forms.ModelForm):
     class Meta:

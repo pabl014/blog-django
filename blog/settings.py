@@ -1,3 +1,5 @@
+import os
+
 """
 Django settings for blog project.
 
@@ -123,3 +125,8 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = "blogApp.CustomUser"
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# URL, pod którym będą dostępne przesłane pliki (MEDIA_URL)
+MEDIA_URL = '/media/'

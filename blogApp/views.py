@@ -13,7 +13,9 @@ def blog_list(request):
 def blog_detail(request, blog_id):
     blog = get_object_or_404(Blog, pk=blog_id)
     articles = Article.objects.filter(blog=blog)
-    return render(request, 'blogs/blog_detail.html', {'blog': blog, 'articles': articles})
+    author_avatar = blog.author.avatar  # Pobieramy avatar autora bloga
+    
+    return render(request, 'blogs/blog_detail.html', {'blog': blog, 'articles': articles, 'author_avatar': author_avatar})
 
 def article_detail(request, blog_id, article_id):
     article = get_object_or_404(Article, pk=article_id)
@@ -77,10 +79,11 @@ def add_comment(request, blog_id, article_id):
 
 def register(request):
     if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST, request.FILES)  # Przekazujemy request.FILES, aby obsłużyć przesłany plik (avatar)
         if form.is_valid():
             form.save()
             return redirect('login')
+        else: print(form.errors)
     else:
         form = CustomUserCreationForm()
     return render(request, 'users/register.html', {'form': form})
