@@ -1,22 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'base.html' %}
 
-<head>
-    <meta charset="UTF-8">
-    <title>{{ article.title }}</title>
-</head>
+{% block title %}Article Detail{% endblock %}
 
-<body>
-    <h1>{{ article.title }}</h1>
-    <p>Date: {{ article.date }}</p>
-    <p>Location: {{ article.location }}</p>
-    <p>{{ article.content }}</p>
-    <h2>Comments</h2>
-    <ul>
-        {% for comment in comments %}
-        <li>{{ comment.body }} - submitted by {{ comment.author.username }}</li>
-        {% endfor %}
-    </ul>
-</body>
+{% block content %}
+<h1>{{ article.title }}</h1>
+<p>{{ article.content }}</p>
 
-</html>
+<h2>Comments:</h2>
+<ul>
+    {% for comment in comments %}
+    <li>{{ comment.body }} - {{ comment.author }}</li>
+    {% endfor %}
+</ul>
+
+<h2>Add a comment:</h2>
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Add comment</button>
+</form>
+<a href="{% url 'blog_detail' blog_id=article.blog.id %}">Back to all the articles</a>
+{% endblock %}
