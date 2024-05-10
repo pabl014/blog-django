@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.decorators import login_required
 from .forms import CustomUserCreationForm
 from django.contrib.auth import authenticate, login, logout
 from .forms import CustomUserCreationForm, BlogForm, ArticleForm, CommentForm
@@ -32,7 +33,7 @@ def article_detail(request, blog_id, article_id):
     else:
         form = CommentForm()
 
-    return render(request, 'articles/article_detail.html', {'article': article, 'comments': comments, 'form': form})
+    return render(request, 'articles/article_detail.html', {'article': article, 'comments': comments, 'form': form, 'blog_id': blog_id})
 
 def add_blog(request):
     if request.method == 'POST':
@@ -77,6 +78,65 @@ def add_comment(request, blog_id, article_id):
         form = CommentForm()
     return render(request, 'comments/add_comment.html', {'form': form})
 
+@login_required
+def delete_blog(request, blog_id):
+    blog = get_object_or_404(Blog, pk=blog_id)
+    if request.user == blog.author:
+        blog.delete()
+    return redirect('blog_list')
+
+@login_required
+def delete_article(request, blog_id, article_id):
+    article = get_object_or_404(Article, pk=article_id)
+    if request.user == article.blog.author:
+        article.delete()
+    return redirect('blog_detail', blog_id=blog_id)
+
+@login_required
+def delete_comment(request, blog_id, article_id, comment_id):
+    comment = get_object_or_404(Comment, pk=comment_id)
+    # Dodajemy warunek, sprawdzający czy aktualnie zalogowany użytkownik jest autorem komentarza
+    if request.user == comment.author:
+        comment.delete()
+    # Przekierowanie na szczegóły artykułu po usunięciu komentarza
+    return redirect('article_detail', blog_id=blog_id, article_id=article_id)
+
+@login_required
+def edit_blog(request, blog_id):
+    blog = get_object_or_404(Blog, pk=blog_id)
+    if request.method == 'POST':
+        form = BlogForm(request.POST, instance=blog)
+        if form.is_valid():
+            form.save()
+            return redirect('blog_detail', blog_id=blog_id)
+    else:
+        form = BlogForm(instance=blog)
+    return render(request, 'blogs/edit_blog.html', {'form': form})
+
+@login_required
+def edit_article(request, blog_id, article_id):
+    article = get_object_or_404(Article, pk=article_id)
+    if request.method == 'POST':
+        form = ArticleForm(request.POST, instance=article)
+        if form.is_valid():
+            form.save()
+            return redirect('article_detail', blog_id=blog_id, article_id=article_id)
+    else:
+        form = ArticleForm(instance=article)
+    return render(request, 'articles/edit_article.html', {'form': form})
+
+@login_required
+def edit_comment(request, blog_id, article_id, comment_id):
+    comment = get_object_or_404(Comment, pk=comment_id)
+    if request.method == 'POST':
+        form = CommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            form.save()
+            return redirect('article_detail', blog_id=blog_id, article_id=article_id)
+    else:
+        form = CommentForm(instance=comment)
+    return render(request, 'comments/edit_comment.html', {'form': form})
+
 def register(request):
     if request.method == 'POST':
         form = CustomUserCreationForm(request.POST, request.FILES)  # Przekazujemy request.FILES, aby obsłużyć przesłany plik (avatar)
@@ -105,3 +165,6 @@ def user_login(request):
 def user_logout(request):
     logout(request)
     return redirect('/blogs')
+
+def error_404_view(request, exception):
+    return render(request, '404.html', status=404)
