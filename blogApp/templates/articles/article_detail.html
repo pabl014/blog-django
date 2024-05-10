@@ -26,22 +26,21 @@
 <p>{{ article.content }}</p>
 
 <h2>Comments:</h2>
-<ul>
+<ul class="ps-0">
     {% for comment in comments %}
     <li class="mt-1" style="list-style-type: none;">
-        <div className="card mb-3">
-            <div className="card-body">
-                <h5 className="card-title">
+        <div class="card mb-3" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">
                     {{ comment.author }}
                 </h5>
-                <p className="card-text mt-1 ">{{comment.body}}
+                <p class="card-text mt-1 ">Review: {{comment.body}}
                 </p>
-                <div className='d-flex justify-content-between'>
+                <div class='d-flex justify-content-between'>
                     {% if request.user == comment.author %}
                     <a href="{% url 'delete_comment' blog_id=article.blog.id article_id=article.id comment_id=comment.id %}"
-                        class="btn btn-danger d-inline-block py-1 px-2"><svg xmlns="http://www.w3.org/2000/svg"
-                            class="mb-1" width="16" height="16" fill="currentColor" class="bi bi-trash"
-                            viewBox="0 0 16 16">
+                        class="btn btn-danger  py-1 px-2"><svg xmlns="http://www.w3.org/2000/svg" class="mb-1"
+                            width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                             <path
                                 d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
                             <path
