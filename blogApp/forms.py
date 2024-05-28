@@ -15,11 +15,11 @@ class BlogForm(forms.ModelForm):
         fields = ['title']
 
 class ArticleForm(forms.ModelForm):
+    images = forms.FileField(widget=forms.ClearableFileInput(attrs={'allow_multiple_selected': True}), required=False)
     class Meta:
         model = Article
-        fields = ['title', 'content', 'public', 'password', 'date', 'location']
+        fields = ['title', 'content', 'public', 'password', 'date', 'location', 'images']
         
-
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment

@@ -28,10 +28,11 @@ class Article(models.Model):
         return self.title
     
 class ArticleImage(models.Model):
+    article = models.ForeignKey(Article, related_name='article_images', on_delete=models.CASCADE)
     image = models.ImageField(upload_to='article_images')
 
     def __str__(self):
-        return f"Image {self.id}"
+        return f"Image for {self.article.title}"
 
 class Comment(models.Model):
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)

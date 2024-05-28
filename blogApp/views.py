@@ -21,6 +21,7 @@ def blog_detail(request, blog_id):
 def article_detail(request, blog_id, article_id):
     article = get_object_or_404(Article, pk=article_id)
     comments = article.comment_set.all()  # Pobierz wszystkie komentarze dla tego artykułu
+    images = article.article_images.all() 
 
     if request.method == 'POST':
         form = CommentForm(request.POST)
@@ -33,7 +34,7 @@ def article_detail(request, blog_id, article_id):
     else:
         form = CommentForm()
 
-    return render(request, 'articles/article_detail.html', {'article': article, 'comments': comments, 'form': form, 'blog_id': blog_id})
+    return render(request, 'articles/article_detail.html', {'article': article, 'comments': comments, 'form': form, 'blog_id': blog_id, 'images': images})
 
 def add_blog(request):
     if request.method == 'POST':
@@ -51,18 +52,25 @@ def add_article(request, blog_id):
     blog = get_object_or_404(Blog, pk=blog_id)
     if request.user == blog.author:
         if request.method == 'POST':
-            form = ArticleForm(request.POST)
+            form = ArticleForm(request.POST, request.FILES)
             if form.is_valid():
                 article = form.save(commit=False)
                 article.blog = blog
+                print("Images:", form.cleaned_data['images'])
                 article.save()
+                # Przetwarzanie wielu zdjęć dla artykułu
+                for image in request.FILES.getlist('images'):
+                    article.images.create(article=article, image=image)
                 return redirect('blog_detail', blog_id=blog.id)
+            else:
+                print(form.errors)
         else:
             form = ArticleForm()
         return render(request, 'articles/add_article.html', {'form': form})
     else:
         message = "You have no permission to add articles on this blog."
         return render(request, 'permission_denied.html', {'message': message})
+
 
 def add_comment(request, blog_id, article_id):
     article = get_object_or_404(Article, pk=article_id)

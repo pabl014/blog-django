@@ -4,8 +4,8 @@
 
 {% block content %}
 <h1>Dodaj nowy artykuł</h1>
-<div class="container w-50" enctype="multipart/form-data">
-    <form method="POST">
+<div class="container w-50">
+    <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="mb-3">
             <label for="id_title" class="form-label">Title:</label>
