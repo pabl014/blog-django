@@ -4,9 +4,40 @@
 
 {% block content %}
 <h1>Edit Article</h1>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-success">Save</button>
-</form>
+<div class="container w-50">
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="id_title" class="form-label">Title:</label>
+            <input type="text" name="title" value="{{ form.initial.title }}" maxlength="100" required="" id="id_title"
+                class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="id_content" class="form-label">Content:</label>
+            <input type="text" name="content" value="{{ form.initial.content }}" maxlength="1000" required=""
+                id="id_content" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="id_public" class="form-check-label">Public</label>
+            <input type="checkbox" name="public" id="id_public" {% if form.initial.public %}checked{% endif %}
+                class="form-check-input">
+        </div>
+        <div class="mb-3">
+            <label for="id_password" class="form-label">Password:</label>
+            <input type="text" name="password" maxlength="100" id="id_password" class="form-control"
+                value="{{ form.initial.password }}">
+        </div>
+        <div class="mb-3">
+            <label for="id_date" class="form-label">Date:</label>
+            <input type="date" name="date" value="{{ form.initial.date }}" maxlength="100" required="" id="id_date"
+                class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="id_location" class="form-label">Location:</label>
+            <input type="text" name="location" value="{{ form.initial.location }}" maxlength="100" required=""
+                id="id_location" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-success">Save</button>
+    </form>
+</div>
 {% endblock %}

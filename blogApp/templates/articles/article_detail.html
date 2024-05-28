@@ -23,7 +23,8 @@
     {% endif %}
 </div>
 <p>Location: {{article.location}}</p>
-<p>{{ article.content }}</p>
+<p>Date: {{article.date}}</p>
+<p>Content: {{ article.content }}</p>
 
 <h2>Comments:</h2>
 <ul class="ps-0">
@@ -62,17 +63,23 @@
 </ul>
 {% if user.is_authenticated %}
 <h2>Add a comment:</h2>
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Add comment</button>
-</form>
+<div class="w-25">
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="id_body" class="form-label">Body:</label>
+            <textarea name="body" cols="5" rows="3" required="" id="id_body" class="form-control"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Add comment</button>
+    </form>
+</div>
 {% else %}
 <div class="alert alert-info w-50" role="alert">
     You have to be logged in if you want to add a comment!
 </div>
 
 {% endif%}
-<a href="{% url 'blog_detail' blog_id=article.blog.id %}">Back to all the articles</a>
-
+<div class="mt-2 mb-3">
+    <a href="{% url 'blog_detail' blog_id=article.blog.id %}">Back to all the articles</a>
+</div>
 {% endblock %}

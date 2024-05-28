@@ -4,9 +4,39 @@
 
 {% block content %}
 <h1>Dodaj nowy artykuł</h1>
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Add article</button>
-</form>
+<div class="container w-50" enctype="multipart/form-data">
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="id_title" class="form-label">Title:</label>
+            <input type="text" name="title" maxlength="100" required="" id="id_title" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="id_content" class="form-label">Content:</label>
+            <input type="text" name="content" maxlength="1000" required="" id="id_content" class="form-control">
+        </div>
+        <div class="mb-3 form-check">
+            <input type="checkbox" name="public" id="id_public" class="form-check-input">
+            <label for="id_public" class="form-check-label">Public</label>
+        </div>
+        <div class="mb-3">
+            <label for="id_password" class="form-label">Password:</label>
+            <input type="text" name="password" maxlength="100" id="id_password" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="id_date" class="form-label">Date:</label>
+            <input type="date" name="date" maxlength="100" required="" id="id_date" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="id_location" class="form-label">Location:</label>
+            <input type="text" name="location" maxlength="100" required="" id="id_location" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="id_images" class="form-label">Images:</label>
+            <input type="file" name="images" id="id_images" class="form-control" multiple>
+        </div>
+        <button type="submit" class="btn btn-primary">Add article</button>
+    </form>
+</div>
+
 {% endblock %}

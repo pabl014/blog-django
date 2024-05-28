@@ -4,9 +4,14 @@
 
 {% block content %}
 <h1>Add new blog</h1>
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Add blog</button>
-</form>
+<div class="container w-50">
+    <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="id_title" class="form-label">Title:</label>
+            <input type="text" name="title" maxlength="100" required="" id="id_title" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary">Add blog</button>
+    </form>
+</div>
 {% endblock %}

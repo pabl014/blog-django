@@ -4,9 +4,15 @@
 
 {% block content %}
 <h1>Edit Blog</h1>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-success">Save</button>
-</form>
+<div class="container w-50">
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="id_title" class="form-label">Title:</label>
+            <input type="text" name="title" value="{{ form.initial.title }}" maxlength="100" required="" id="id_title"
+                class="form-control">
+        </div>
+        <button type="submit" class="btn btn-success">Save</button>
+    </form>
+</div>
 {% endblock %}

@@ -139,7 +139,7 @@ def edit_comment(request, blog_id, article_id, comment_id):
 
 def register(request):
     if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST, request.FILES)  # Przekazujemy request.FILES, aby obsłużyć przesłany plik (avatar)
+        form = CustomUserCreationForm(request.POST, request.FILES) 
         if form.is_valid():
             form.save()
             return redirect('login')

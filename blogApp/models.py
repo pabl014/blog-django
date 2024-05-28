@@ -22,9 +22,16 @@ class Article(models.Model):
     date = models.CharField(max_length=100)
     location = models.CharField(max_length=100)
     blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
+    images = models.ManyToManyField('ArticleImage', related_name='articles', blank=True)
 
     def __str__(self):
         return self.title
+    
+class ArticleImage(models.Model):
+    image = models.ImageField(upload_to='article_images')
+
+    def __str__(self):
+        return f"Image {self.id}"
 
 class Comment(models.Model):
     author = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
