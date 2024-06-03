@@ -6,6 +6,8 @@ from django.contrib.auth import authenticate, login, logout
 from .forms import CustomUserCreationForm, BlogForm, ArticleForm, CommentForm
 from .models import Blog, Article, Comment, CustomUser
 
+def home(request):
+    return render(request, 'home.html')
 
 def blog_list(request):
     blogs = Blog.objects.all()

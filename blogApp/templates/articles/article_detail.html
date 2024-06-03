@@ -3,63 +3,104 @@
 {% block title %}Article Detail{% endblock %}
 
 {% block content %}
-<div class="d-flex align-items-center">
-    <h1>{{ article.title }}</h1>
-    {% if request.user == article.blog.author %}
-    <a href="{% url 'delete_article' blog_id=article.blog.id article_id=article.id %}" class="btn btn-danger ms-2"><svg
-            xmlns="http://www.w3.org/2000/svg" class="mb-1" width="16" height="16" fill="currentColor"
-            class="bi bi-trash" viewBox="0 0 16 16">
-            <path
-                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
-            <path
-                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
-        </svg> Delete article</a>
-    <a href="{% url 'edit_article' blog_id=article.blog.id article_id=article.id %}" class="btn btn-info ms-2"><svg
-            xmlns="http://www.w3.org/2000/svg" class="mb-1" width="16" height="16" fill="currentColor"
-            class="bi bi-pencil" viewBox="0 0 16 16">
-            <path
-                d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325" />
-        </svg> Edit Article</a>
-    {% endif %}
-</div>
-<p>Location: {{article.location}}</p>
-<p>Date: {{article.date}}</p>
-{% if images %}
-<h2>Images</h2>
-<div id="carouselExample" class="carousel slide w-25">
-    <div class="carousel-inner">
-        {% for image in images %}
-        <div class="carousel-item {% if forloop.first %}active{% endif %}">
-            <img src="{{ image.image.url }}" alt="{{ image }}" class="d-block w-100">
+<div class="container-fluid mt-5 mb-3">
+    <div class="row">
+        <div class="col-md-7 order-1">
+            {% if images %}
+            <div id="carouselExample" class="carousel slide">
+                <div class="carousel-inner">
+                    {% for image in images %}
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                        <img src="{{ image.image.url }}" alt="{{ image }}" class="d-block w-100">
+                    </div>
+                    {% endfor %}
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExample"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+            {% endif %}
+
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h5 class="card-title d-flex justify-content-between align-items-center">
+                        <span>
+                            {{ article.title }}
+                        </span>
+                        {% if request.user == article.blog.author %}
+                        <div>
+                            <a href="{% url 'delete_article' blog_id=article.blog.id article_id=article.id %}"
+                                class="btn btn-danger ms-2"><svg xmlns="http://www.w3.org/2000/svg" class="mb-1"
+                                    width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                    <path
+                                        d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z" />
+                                    <path
+                                        d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z" />
+                                </svg> Delete</a>
+                            <a href="{% url 'edit_article' blog_id=article.blog.id article_id=article.id %}"
+                                class="btn btn-info ms-2"><svg xmlns="http://www.w3.org/2000/svg" class="mb-1"
+                                    width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                                    <path
+                                        d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325" />
+                                </svg> Edit</a>
+                        </div>
+                        {% endif %}
+                    </h5>
+                    <hr>
+                    <p class="card-text">
+                        {{article.content}}
+                    </p>
+
+                </div>
+
+                <div class="card-footer text-muted d-flex justify-content-between">
+                    <span>Location: {{article.location}}</span> <span>Date: {{article.date}}</span>
+                </div>
+            </div>
         </div>
-        {% endfor %}
-    </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-    </button>
-</div>
-{% endif %}
-<h2>Content: </h2>
-<p>{{ article.content }}</p>
-<h2>Comments:</h2>
-<ul class="ps-0">
-    {% for comment in comments %}
-    <li class="mt-1" style="list-style-type: none;">
-        <div class="card mb-3" style="width: 18rem;">
-            <div class="card-body">
-                <h5 class="card-title">
-                    {{ comment.author }}
-                </h5>
-                <p class="card-text mt-1 ">Review: {{comment.body}}
-                </p>
-                <div class='d-flex justify-content-between'>
-                    {% if request.user == comment.author %}
-                    <a href="{% url 'delete_comment' blog_id=article.blog.id article_id=article.id comment_id=comment.id %}"
+
+        <div class="col-md-5 order-2">
+            <div id='map' class="mb-3"></div>
+            <h3>Comments: </h3>
+            {% if user.is_authenticated %}
+            <div class="w-100">
+                <form method="POST" class="mb-3">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="id_body" class="form-label">Body</label>
+                        <textarea name="body" cols="5" rows="3" required="" id="id_body"
+                            class="form-control"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Add comment</button>
+                </form>
+            </div>
+            {% else %}
+            <div class="alert alert-info w-75" role="alert">
+                You have to be logged in if you want to add a comment!
+            </div>
+
+            {% endif%}
+
+            {% for comment in comments %}
+            <div class="card mb-3 w-75">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        {{comment.author}}
+                    </h5>
+                    <p class="card-text">Review: {{comment.body}}
+                    </p>
+                </div>
+                {% if request.user == comment.author %}
+
+                <div class="card-footer"><a
+                        href="{% url 'delete_comment' blog_id=article.blog.id article_id=article.id comment_id=comment.id %}"
                         class="btn btn-danger  py-1 px-2"><svg xmlns="http://www.w3.org/2000/svg" class="mb-1"
                             width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                             <path
@@ -73,33 +114,13 @@
                             <path
                                 d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325" />
                         </svg></a>
-                    {% endif %}
                 </div>
+                {% endif %}
             </div>
-        </div>
-    </li>
+            {% endfor %}
 
-    {% endfor %}
-</ul>
-{% if user.is_authenticated %}
-<h2>Add a comment:</h2>
-<div class="w-25">
-    <form method="POST">
-        {% csrf_token %}
-        <div class="mb-3">
-            <label for="id_body" class="form-label">Body:</label>
-            <textarea name="body" cols="5" rows="3" required="" id="id_body" class="form-control"></textarea>
         </div>
-        <button type="submit" class="btn btn-primary">Add comment</button>
-    </form>
-</div>
-{% else %}
-<div class="alert alert-info w-50" role="alert">
-    You have to be logged in if you want to add a comment!
+    </div>
 </div>
 
-{% endif%}
-<div class="mt-2 mb-3">
-    <a href="{% url 'blog_detail' blog_id=article.blog.id %}">Back to all the articles</a>
-</div>
 {% endblock %}
