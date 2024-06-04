@@ -3,8 +3,9 @@
 {% block title %}Add blog{% endblock %}
 
 {% block content %}
-<h1>Add new blog</h1>
+
 <div class="container w-50">
+    <h1>Add new blog</h1>
     <form method="POST">
         {% csrf_token %}
         <div class="mb-3">

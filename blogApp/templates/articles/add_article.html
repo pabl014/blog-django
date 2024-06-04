@@ -3,8 +3,8 @@
 {% block title %}Add article{% endblock %}
 
 {% block content %}
-<h1>Dodaj nowy artykuł</h1>
 <div class="container w-50">
+    <h1>Add new article</h1>
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="mb-3">
@@ -13,7 +13,8 @@
         </div>
         <div class="mb-3">
             <label for="id_content" class="form-label">Content:</label>
-            <input type="text" name="content" maxlength="1000" required="" id="id_content" class="form-control">
+            <textarea type="text" name="content" maxlength="1000" cols="3" rows="5" id="id_content"
+                class="form-control"></textarea>
         </div>
         <div class="mb-3 form-check">
             <input type="checkbox" name="public" id="id_public" class="form-check-input">

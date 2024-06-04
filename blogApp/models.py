@@ -16,7 +16,7 @@ class Blog(models.Model):
 
 class Article(models.Model):
     title = models.CharField(max_length=100)
-    content = models.CharField(max_length=1000)
+    content = models.CharField(max_length=2000)
     public = models.BooleanField(default=False)
     password = models.CharField(max_length=100, blank=True)
     date = models.CharField(max_length=100)

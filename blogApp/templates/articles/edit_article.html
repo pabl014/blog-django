@@ -3,8 +3,9 @@
 {% block title %}Edit article{% endblock %}
 
 {% block content %}
-<h1>Edit Article</h1>
+
 <div class="container w-50">
+    <h1>Edit Article</h1>
     <form method="post">
         {% csrf_token %}
         <div class="mb-3">
@@ -14,8 +15,8 @@
         </div>
         <div class="mb-3">
             <label for="id_content" class="form-label">Content:</label>
-            <input type="text" name="content" value="{{ form.initial.content }}" maxlength="1000" required=""
-                id="id_content" class="form-control">
+            <textarea type="text" name="content" cols="3" rows="5" maxlength="2000" required="" id="id_content"
+                class="form-control">{{ form.initial.content }}</textarea>
         </div>
         <div class="mb-3">
             <label for="id_public" class="form-check-label">Public</label>
