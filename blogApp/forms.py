@@ -24,3 +24,6 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
         fields = ['body']
+        
+class PasswordForm(forms.Form):
+    password = forms.CharField(widget=forms.PasswordInput, label='Article Password')

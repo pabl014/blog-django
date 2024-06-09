@@ -18,14 +18,14 @@
             <textarea type="text" name="content" cols="3" rows="5" maxlength="2000" required="" id="id_content"
                 class="form-control">{{ form.initial.content }}</textarea>
         </div>
-        <div class="mb-3">
-            <label for="id_public" class="form-check-label">Public</label>
+        <div class="mb-3 form-check">
             <input type="checkbox" name="public" id="id_public" {% if form.initial.public %}checked{% endif %}
                 class="form-check-input">
+            <label for="id_public" class="form-check-label">Public</label>
         </div>
-        <div class="mb-3">
+        <div class="mb-3" id="password-field">
             <label for="id_password" class="form-label">Password:</label>
-            <input type="text" name="password" maxlength="100" id="id_password" class="form-control"
+            <input type="password" name="password" maxlength="100" id="id_password" class="form-control"
                 value="{{ form.initial.password }}">
         </div>
         <div class="mb-3">
@@ -41,4 +41,27 @@
         <button type="submit" class="btn btn-success">Save</button>
     </form>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function ()
+    {
+        const publicCheckbox = document.getElementById('id_public');
+        const passwordField = document.getElementById('password-field');
+
+        function togglePasswordField()
+        {
+            if (publicCheckbox.checked)
+            {
+                passwordField.style.display = 'none';
+            } else
+            {
+                passwordField.style.display = 'block';
+            }
+        }
+
+        publicCheckbox.addEventListener('change', togglePasswordField);
+        togglePasswordField(); // Initial check
+    });
+</script>
+
 {% endblock %}
