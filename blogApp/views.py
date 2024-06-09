@@ -178,11 +178,17 @@ def edit_comment(request, blog_id, article_id, comment_id):
 
 def register(request):
     if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST, request.FILES) 
+        form = CustomUserCreationForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            return redirect('login')
-        else: print(form.errors)
+            user = form.save(commit=False)
+            admin_code = form.cleaned_data.get('admin_code')
+            if admin_code == '123456':  # Replace '123456' with your desired admin code
+                user.isAdmin = True
+            user.save()
+            login(request, user)
+            return redirect('home')
+        else:
+            print(form.errors)
     else:
         form = CustomUserCreationForm()
     return render(request, 'users/register.html', {'form': form})
