@@ -32,6 +32,9 @@
         <div class="mb-3">
             <label for="id_avatar" class="form-label">Avatar:</label>
             <input type="file" class="form-control" name="avatar" accept="image/*" id="id_avatar">
+            <div id="file-size-warning" style="color: red; display: none;">
+                Total file size exceeds 1GB!
+            </div>
         </div>
         <div class="mb-3">
             <label for="id_admin_code" class="form-label">Admin Code:</label>
@@ -40,4 +43,29 @@
         <button type="submit" class="btn btn-primary">Register</button>
     </form>
 </div>
+
+<script>
+    document.getElementById('id_avatar').addEventListener('change', function (event)
+    {
+        var files = event.target.files;
+        var totalSize = 0;
+        //var maxSize = 1 * 1024 * 1024 * 1024; // 1GB in bytes
+        var maxSize = 450 * 1024; // 450KB in bytes
+
+        for (var i = 0; i < files.length; i++)
+        {
+            totalSize += files[i].size;
+        }
+
+        var warning = document.getElementById('file-size-warning');
+        if (totalSize > maxSize)
+        {
+            warning.style.display = 'block';
+            event.target.value = ''; // Clear the input if limit exceeded
+        } else
+        {
+            warning.style.display = 'none';
+        }
+    });
+</script>
 {% endblock %}
