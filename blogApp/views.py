@@ -103,14 +103,14 @@ def add_comment(request, blog_id, article_id):
 @login_required
 def delete_blog(request, blog_id):
     blog = get_object_or_404(Blog, pk=blog_id)
-    if request.user == blog.author:
+    if request.user == blog.author or request.user.isAdmin:
         blog.delete()
     return redirect('blog_list')
 
 @login_required
 def delete_article(request, blog_id, article_id):
     article = get_object_or_404(Article, pk=article_id)
-    if request.user == article.blog.author:
+    if request.user == article.blog.author or request.user.isAdmin:
         article.delete()
     return redirect('blog_detail', blog_id=blog_id)
 
@@ -118,7 +118,7 @@ def delete_article(request, blog_id, article_id):
 def delete_comment(request, blog_id, article_id, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
     # Dodajemy warunek, sprawdzający czy aktualnie zalogowany użytkownik jest autorem komentarza
-    if request.user == comment.author:
+    if request.user == comment.author or request.user.isAdmin:
         comment.delete()
     # Przekierowanie na szczegóły artykułu po usunięciu komentarza
     return redirect('article_detail', blog_id=blog_id, article_id=article_id)
