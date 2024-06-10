@@ -105,6 +105,9 @@
                 <div class="card-body">
                     <h5 class="card-title">
                         {{comment.author}}
+                        {% if comment.author.isAdmin %}
+                        <span style="color:gold;" class="fs-6">(Admin)</span>
+                        {% endif %}
                     </h5>
                     <p class="card-text">Review: {{comment.body}}
                     </p>
