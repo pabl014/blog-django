@@ -11,7 +11,12 @@ def home(request):
 
 def blog_list(request):
     blogs = Blog.objects.all()
-    return render(request, 'blogs/blog_list.html', {'blogs': blogs})
+    user_blogs = Blog.objects.filter(author=request.user) if request.user.is_authenticated else None
+    context = {
+        'blogs': blogs,
+        'user_blogs': user_blogs,
+    }
+    return render(request, 'blogs/blog_list.html', context)
 
 def blog_detail(request, blog_id):
     blog = get_object_or_404(Blog, pk=blog_id)
