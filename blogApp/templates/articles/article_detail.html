@@ -107,17 +107,17 @@
                     <h5 class="card-title">
                         {% if comment.author.avatar %}
                         <img src="{{ comment.author.avatar.url }}" alt="{{ comment.author.username }}'s avatar"
-                            class="rounded-circle me-2" width="40" height="40">
+                            class="rounded-circle me-1" width="40" height="40">
                         {% else %}
                         <img src="{% static 'default-avatar.png' %}" alt="{{ comment.author.username }}'s avatar"
-                            class="rounded-circle me-2" width="40" height="40">
+                            class="rounded-circle me-1" width="40" height="40">
                         {% endif %}
                         {{comment.author}}
                         {% if comment.author.isAdmin %}
                         <span style="color:gold;" class="fs-6">(Admin)</span>
                         {% endif %}
                     </h5>
-                    <p class="card-text">Review: {{comment.body}}
+                    <p class="card-text">{{comment.body}}
                     </p>
                 </div>
                 {% if request.user == comment.author %}
