@@ -49,8 +49,8 @@
     {
         var files = event.target.files;
         var totalSize = 0;
-        //var maxSize = 1 * 1024 * 1024 * 1024; // 1GB in bytes
-        var maxSize = 450 * 1024; // 450KB in bytes
+        //var maxSize = 1 * 1024 * 1024 * 1024; // 1GB
+        var maxSize = 450 * 1024; // 450KB
 
         for (var i = 0; i < files.length; i++)
         {
@@ -61,7 +61,7 @@
         if (totalSize > maxSize)
         {
             warning.style.display = 'block';
-            event.target.value = ''; // Clear the input if limit exceeded
+            event.target.value = ''; // Wyczysc input przy przekroczeniu limitu
         } else
         {
             warning.style.display = 'none';

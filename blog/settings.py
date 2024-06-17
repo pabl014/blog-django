@@ -1,5 +1,5 @@
 import os
-
+import logging.config
 """
 Django settings for blog project.
 
@@ -31,7 +31,35 @@ ALLOWED_HOSTS = ['*']
 
 
 # Application definition
-
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'timestamp': {
+            'format': '{asctime} {levelname} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',  # Lub poziom, który chcesz ustawić
+            'class': 'logging.StreamHandler',
+            'formatter': 'timestamp'
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'ERROR',  # Lub poziom, który chcesz ustawić
+            'propagate': True,
+        },
+        'blogApp': {
+            'handlers': ['console'],
+            'level': 'INFO',  # Lub poziom, który chcesz ustawić
+            'propagate': True,
+        },
+    },
+}
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',

@@ -52,17 +52,17 @@
 
         function togglePasswordField()
         {
-            if (publicCheckbox.checked)
+            if (publicCheckbox.checked) // Checkbox dla Public zaznaczone, więc passwordField jest ukryte
             {
                 passwordField.style.display = 'none';
-            } else
+            } else // Checkbox dla Public odznaczone, więc passwordField jest widoczne
             {
                 passwordField.style.display = 'block';
             }
         }
 
         publicCheckbox.addEventListener('change', togglePasswordField);
-        togglePasswordField(); // Initial check
+        togglePasswordField();
     });
 </script>
 
@@ -71,8 +71,8 @@
     {
         var files = event.target.files;
         var totalSize = 0;
-        var maxSize = 1 * 1024 * 1024 * 1024; // 1GB in bytes
-        // var maxSize = 450 * 1024; // 450KB in bytes
+        var maxSize = 1 * 1024 * 1024 * 1024; // 1GB
+        // var maxSize = 450 * 1024; // 450KB 
 
         for (var i = 0; i < files.length; i++)
         {
@@ -83,7 +83,7 @@
         if (totalSize > maxSize)
         {
             warning.style.display = 'block';
-            event.target.value = ''; // Clear the input if limit exceeded
+            event.target.value = ''; // Wyczysc inputa przy przekroczeniu limitu
         } else
         {
             warning.style.display = 'none';

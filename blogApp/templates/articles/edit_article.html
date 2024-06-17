@@ -50,17 +50,17 @@
 
         function togglePasswordField()
         {
-            if (publicCheckbox.checked)
+            if (publicCheckbox.checked) // Checkbox dla Public zaznaczone, więc passwordField jest ukryte
             {
                 passwordField.style.display = 'none';
-            } else
+            } else // Checkbox dla Public odznaczone, więc passwordField jest widoczne
             {
                 passwordField.style.display = 'block';
             }
         }
 
         publicCheckbox.addEventListener('change', togglePasswordField);
-        togglePasswordField(); // Initial check
+        togglePasswordField(); 
     });
 </script>
 
