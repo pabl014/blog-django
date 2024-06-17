@@ -46,6 +46,12 @@ LOGGING = {
             'class': 'logging.StreamHandler',
             'formatter': 'timestamp'
         },
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': 'blogApp/logs/logs.log',
+            'formatter': 'timestamp'
+        },
     },
     'loggers': {
         'django': {
@@ -54,7 +60,7 @@ LOGGING = {
             'propagate': True,
         },
         'blogApp': {
-            'handlers': ['console'],
+            'handlers': ['console', 'file'],
             'level': 'INFO',  # Lub poziom, który chcesz ustawić
             'propagate': True,
         },
