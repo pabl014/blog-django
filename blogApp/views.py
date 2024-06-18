@@ -26,34 +26,51 @@ def blog_list(request):
 
 def blog_detail(request, blog_id):
     blog = get_object_or_404(Blog, pk=blog_id)
-    logger.info('Displaying details of a blog')
+    logger.info(f'Displaying details of a blog {blog_id}')
     articles = Article.objects.filter(blog=blog)
     author_avatar = blog.author.avatar  # Pobieramy avatar autora bloga
     
     return render(request, 'blogs/blog_detail.html', {'blog': blog, 'articles': articles, 'author_avatar': author_avatar})
 
 def article_detail(request, blog_id, article_id):
-    logger.info('Displaying details of an article')
+    logger.info(f'Displaying details of an article {article_id}')
     article = get_object_or_404(Article, pk=article_id)
     comments = article.comment_set.all()
     images = article.article_images.all()
 
+    article_id_str = str(article_id)  # Zamień article_id na string
+
+    # Inicjalizacja sesji dla artykułów, jeśli nie istnieje
+    if 'article_passwords' not in request.session:
+        request.session['article_passwords'] = {}
+        logger.info('Initialized article_passwords in session')
+
+    # Sprawdzenie, czy artykuł jest prywatny i czy użytkownik jest autorem artykułu
     if not article.public:
-        # Sprawdzenie, czy użytkownik jest autorem artykułu
         if request.user != article.blog.author:
-            if request.method == 'POST':
-                entered_password = request.POST.get('password')
-                if entered_password != article.password:
-                    error_message = "Incorrect password."
-                    return render(request, 'articles/article_password.html', {'error_message': error_message, 'blog_id': blog_id, 'article_id': article_id})
+            logger.info('Article is private and user is not the author')
+            # Sprawdzenie, czy poprawne hasło jest zapisane w sesji
+            if article_id_str not in request.session['article_passwords'] or request.session['article_passwords'][article_id_str] != article.password:
+                if request.method == 'POST':
+                    entered_password = request.POST.get('password')
+                    if entered_password == article.password:
+                        request.session['article_passwords'][article_id_str] = entered_password
+                        request.session.modified = True
+                        logger.info(f'Password entered and saved to session for article {article_id_str}')
+                    else:
+                        error_message = "Incorrect password."
+                        logger.warning(f'Incorrect password entered for article {article_id_str}')
+                        return render(request, 'articles/article_password.html', {'error_message': error_message, 'blog_id': blog_id, 'article_id': article_id})
+                else:
+                    logger.info(f'Password needed to see article {article_id_str}')
+                    return render(request, 'articles/article_password.html', {'blog_id': blog_id, 'article_id': article_id})
             else:
-                logger.info('Password needed to see an article')
-                return render(request, 'articles/article_password.html', {'blog_id': blog_id, 'article_id': article_id})
+                logger.info(f'Correct password found in session for article {article_id_str}')
 
     if request.method == 'POST':
         form = CommentForm(request.POST)
         if form.is_valid():
-            logger.info('Comment has been added')
+            logger.info(f'Comment has been added to article {article_id_str}')
             comment = form.save(commit=False)
             comment.author = request.user
             comment.article = article
@@ -63,6 +80,7 @@ def article_detail(request, blog_id, article_id):
         form = CommentForm()
 
     return render(request, 'articles/article_detail.html', {'article': article, 'comments': comments, 'form': form, 'blog_id': blog_id, 'images': images})
+
 
 
 def add_blog(request):
@@ -131,7 +149,7 @@ def delete_blog(request, blog_id):
     logger.info('Deleting a blog')
     blog = get_object_or_404(Blog, pk=blog_id)
     if request.user == blog.author or request.user.isAdmin:
-        logger.info('Blog has been deleted')
+        logger.info(f'Blog {blog_id} has been deleted')
         blog.delete()
     else:
         logger.error('You cannot delete a blog while not being an author of one')
@@ -142,7 +160,7 @@ def delete_article(request, blog_id, article_id):
     logger.info('Deleting an article')
     article = get_object_or_404(Article, pk=article_id)
     if request.user == article.blog.author or request.user.isAdmin:
-        logger.info('Blog has been deleted')
+        logger.info(f'Article {article_id} has been deleted')
         article.delete()
     else:
         logger.error('You cannot delete an article while not being an author of one')
@@ -154,7 +172,7 @@ def delete_comment(request, blog_id, article_id, comment_id):
     comment = get_object_or_404(Comment, pk=comment_id)
     # Dodajemy warunek, sprawdzający czy aktualnie zalogowany użytkownik jest autorem komentarza
     if request.user == comment.author or request.user.isAdmin:
-        logger.info('Comment has been deleted')
+        logger.info(f'Comment {comment_id} has been deleted')
         comment.delete()
     else:
         logger.error('You cannot delete a comment while not being an author of one')
@@ -163,17 +181,17 @@ def delete_comment(request, blog_id, article_id, comment_id):
 
 @login_required
 def edit_blog(request, blog_id):
-    logger.info('Editing a blog')
+    logger.info(f'Editing a blog {blog_id}')
     blog = get_object_or_404(Blog, pk=blog_id)
     if request.user == blog.author:
         if request.method == 'POST':
             form = BlogForm(request.POST, instance=blog)
             if form.is_valid():
-                logger.info('Blog has been edited')
+                logger.info(f'Blog {blog_id} has been edited')
                 form.save()
                 return redirect('blog_detail', blog_id=blog_id)
         else:
-            logger.info('Displaying a form for editing a blog')
+            logger.info(f'Displaying a form for editing a blog {blog_id}')
             form = BlogForm(instance=blog)
         return render(request, 'blogs/edit_blog.html', {'form': form, 'blog': blog})
     else:
@@ -184,14 +202,14 @@ def edit_blog(request, blog_id):
 
 @login_required
 def edit_article(request, blog_id, article_id):
-    logger.info('Editing an article')
+    logger.info(f'Editing an article {article_id}')
     article = get_object_or_404(Article, pk=article_id)
     # Sprawdzamy czy zalogowany użytkownik jest autorem artykułu
     if request.user == article.blog.author:
         if request.method == 'POST':
             form = ArticleForm(request.POST, request.FILES, instance=article)
             if form.is_valid():
-                logger.info('Article has been edited')
+                logger.info(f'Article {article_id} has been edited')
                 article = form.save(commit=False)
                 article.save()
                 if 'images' in request.FILES:
@@ -199,7 +217,7 @@ def edit_article(request, blog_id, article_id):
                         article.images.create(article=article, image=image)
                 return redirect('article_detail', blog_id=blog_id, article_id=article_id)
         else:
-            logger.info('Displaying a form for editing an article')
+            logger.info(f'Displaying a form for editing an article {article_id}')
             form = ArticleForm(instance=article)
         return render(request, 'articles/edit_article.html', {'form': form, 'article': article})
     else:
@@ -209,18 +227,18 @@ def edit_article(request, blog_id, article_id):
 
 @login_required
 def edit_comment(request, blog_id, article_id, comment_id):
-    logger.info('Editing a comment')
+    logger.info(f'Editing a comment {comment_id}')
     comment = get_object_or_404(Comment, pk=comment_id)
     # Sprawdzamy czy zalogowany użytkownik jest autorem komentarza
     if request.user == comment.author:
         if request.method == 'POST':
             form = CommentForm(request.POST, instance=comment)
             if form.is_valid():
-                logger.info('Comment has been edited')
+                logger.info(f'Comment {comment_id} has been edited')
                 form.save()
                 return redirect('article_detail', blog_id=blog_id, article_id=article_id)
         else:
-            logger.info('Displaying a form for editing a comment')
+            logger.info(f'Displaying a form for editing a comment {comment_id}')
             form = CommentForm(instance=comment)
         return render(request, 'comments/edit_comment.html', {'form': form, 'comment': comment})
     else:
@@ -243,7 +261,7 @@ def register(request):
             login(request, user)
             return redirect('home')
         else:
-            logger.warring('Errors related to form occured')
+            logger.warning('Errors related to form occured')
             print(form.errors)
     else:
         logger.info('Displaying a form for registering a user')
